@@ -1,0 +1,124 @@
+@font-face {
+    src: url(fonts/Roboto-Regular.ttf);
+    font-family: Roboto;
+}
+@font-face {
+    src: url(fonts/Roboto_Slab.ttf);
+    font-family: RobotoSlab;
+}
+
+@font-face {
+    src: url(fonts/Stoke-Regular.ttf);
+    font-family: Stoke;
+}
+
+@font-face {
+    src: url(fonts/Baloo_Bhai/BalooBhai-Regular.ttf);
+    font-family: Baloo;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.btn-login {
+  background: #0038FF;
+  border: none;
+  padding: 7px;
+  width: 100px;
+  border-radius: 25px;
+  font-family: RobotoSlab;
+  color: white;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.btn-login:hover{
+  transform: scale(1.1);
+}
+
+.btn-register {
+  background: #7694FF;
+  border: none;
+  padding: 7px;
+  width: 100px;
+  border-radius: 25px;
+  font-family: RobotoSlab;
+  color: white;
+  cursor: pointer;
+  font-size : 20px;
+  transition: 0.5s;
+}
+
+
+.btn-register:hover{
+  transform: scale(1.1);
+}
+
+.btn-lihat-detail {
+  background: #7694FF;
+  border: none;
+  padding: 7px;
+  width: 150px;
+  border-radius: 25px;
+  font-family: RobotoSlab;
+  color: white;
+  transition: 0.5s;
+}
+
+.btn-lihat-detail:hover {
+  background: #0038FF;
+  transform: scale(1.2);
+}
+
+.font-a {
+  font-family: RobotoSlab;
+}
+
+.image-container {
+  background: url(img/bayar.jpg);
+  height: 100vh;
+}
+
+.login-container {
+  width: 50%;
+  height: 70vh;
+  margin: auto;
+  position: relative;
+  top: 10%;
+  border-radius: 33px;
+  background-image: linear-gradient(to right, #36D1DC, #5B86E5);
+
+}
+
+.login-wrap {
+  position: relative;
+  top: 25%;
+  width: 50%;
+  margin: auto;
+  font-family: RobotoSlab;
+
+}
+
+
+.register-container {
+  width: 50%;
+  height: 90vh;
+  position: relative;
+  top: 7%;
+  margin: auto;
+  border-radius: 33px;
+  background-image: linear-gradient(to right, #36D1DC, #5B86E5);
+
+}
+
+.register-wrap {
+  margin: auto;
+  position: relative;
+  top: 5%;
+  width: 65%;
+  height: 50vh;
+  font-family: RobotoSlab;
+
+}
