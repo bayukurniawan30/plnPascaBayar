@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
+-- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 21, 2020 at 01:24 PM
--- Server version: 10.1.37-MariaDB
--- PHP Version: 7.2.12
+-- Generation Time: Mar 21, 2020 at 02:27 PM
+-- Server version: 10.1.38-MariaDB
+-- PHP Version: 7.3.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -97,7 +97,8 @@ CREATE TABLE `pelanggan` (
 
 INSERT INTO `pelanggan` (`id`, `username`, `password`, `nomor_kwh`, `nama_pelanggan`, `alamat`, `id_tarif`) VALUES
 (3, 'gdamerda', '$2y$10$6Ny9e6YyWqneXyZ2cwDcVe.V.fqzrCUj2FdkW4.ZrKtxEIDO8EOTG', '123123', 'Gede Amerta', 'Jalan raya canggu, Pantai Berawa Br.Tibubeneng, Tandeg', 1),
-(4, 'arypradnya', '$2y$10$SVn4RjocCP69C/i1tHL/yujgBOnlHW6Li8qlPrtOIKvUXtxw/BuEm', '456456', 'Ary Pradnya', 'Jalan Raya Pulau Komodo No 1', 1);
+(4, 'arypradnya', '$2y$10$SVn4RjocCP69C/i1tHL/yujgBOnlHW6Li8qlPrtOIKvUXtxw/BuEm', '456456', 'Ary Pradnya', 'Jalan Raya Pulau Komodo No 1', 1),
+(5, 'baycore', '$2y$10$/vytOH/Y820TNROXzEegwO6uWjLE.ikUtMy0h5wk1.k0Byhh4H0E.', '827384993', 'Bayu Kurniawan', 'Jalan Danau Beratan Gg. VI No 5 Sanur', 2);
 
 -- --------------------------------------------------------
 
@@ -115,6 +116,13 @@ CREATE TABLE `pembayaran` (
   `total_bayar` varchar(255) NOT NULL,
   `id_admin` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `pembayaran`
+--
+
+INSERT INTO `pembayaran` (`id`, `id_tagihan`, `id_pelanggan`, `tanggal_pembayaran`, `bulan_bayar`, `biaya_admin`, `total_bayar`, `id_admin`) VALUES
+(1, 13, 5, NULL, NULL, NULL, '75000', 0);
 
 -- --------------------------------------------------------
 
@@ -142,7 +150,8 @@ INSERT INTO `penggunaan` (`id`, `id_pelanggan`, `bulan`, `tahun`, `meter_awal`, 
 (7, 3, '08', 2020, '1000', '2000'),
 (8, 3, '05', 2020, '100', '800'),
 (9, 3, '08', 2020, '500', '2000'),
-(10, 3, '07', 2020, '500', '2000');
+(10, 3, '07', 2020, '500', '2000'),
+(13, 5, '03', 2020, '100', '150');
 
 -- --------------------------------------------------------
 
@@ -171,7 +180,8 @@ INSERT INTO `tagihan` (`id`, `id_penggunaan`, `id_pelanggan`, `bulan`, `tahun`, 
 (7, 7, 3, '08', 2020, '1000', 0),
 (8, 8, 3, '05', 2020, '700', 0),
 (9, 9, 3, '08', 2020, '1500', 0),
-(10, 10, 3, '07', 2020, '1500', 0);
+(10, 10, 3, '07', 2020, '1500', 0),
+(13, 13, 5, '03', 2020, '50', 0);
 
 -- --------------------------------------------------------
 
@@ -263,7 +273,8 @@ ALTER TABLE `penggunaan`
 --
 ALTER TABLE `tagihan`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_penggunaan` (`id_penggunaan`);
+  ADD KEY `id_penggunaan` (`id_penggunaan`),
+  ADD KEY `id_pelanggan` (`id_pelanggan`);
 
 --
 -- Indexes for table `tarif`
@@ -303,25 +314,25 @@ ALTER TABLE `level`
 -- AUTO_INCREMENT for table `pelanggan`
 --
 ALTER TABLE `pelanggan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `pembayaran`
 --
 ALTER TABLE `pembayaran`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `penggunaan`
 --
 ALTER TABLE `penggunaan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `tagihan`
 --
 ALTER TABLE `tagihan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `tarif`
@@ -355,7 +366,8 @@ ALTER TABLE `penggunaan`
 -- Constraints for table `tagihan`
 --
 ALTER TABLE `tagihan`
-  ADD CONSTRAINT `tagihan_ibfk_1` FOREIGN KEY (`id_penggunaan`) REFERENCES `penggunaan` (`id`);
+  ADD CONSTRAINT `tagihan_ibfk_1` FOREIGN KEY (`id_penggunaan`) REFERENCES `penggunaan` (`id`),
+  ADD CONSTRAINT `tagihan_ibfk_2` FOREIGN KEY (`id_pelanggan`) REFERENCES `pelanggan` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

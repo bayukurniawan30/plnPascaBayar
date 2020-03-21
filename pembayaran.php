@@ -1,14 +1,15 @@
 <?php
-  require 'include/connection.php';
-  require 'include/class/userclass.php';
+	require 'include/connection.php';
+	require 'include/class/userclass.php';
 
-  $classUsers = new UsersClass($pdo);
+	$userid     = $_SESSION['id'];
 
-  $userid = $_SESSION['id'];
-  $loginId = $classUsers->loginUser($userid);
-  $username = $loginId->username;
-  $alamat = $loginId->alamat;
-  $nomor_kwh = $loginId->nomor_kwh;
+	$classUsers = new UsersClass($pdo);
+
+	$loginId    = $classUsers->loginUser($userid);
+	$username   = $loginId->username;
+	$alamat     = $loginId->alamat;
+	$nomor_kwh  = $loginId->nomor_kwh;
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -53,39 +54,42 @@
         <div style="position:relative; top: 1%; left: 50%;" class=" uk-card uk-card-default uk-card-xlarge uk-card-body ">
           <h3 class="uk-card-title">PEMBAYARAN</h3>
           <div class="uk-card uk-card-default uk-card-xlarge uk-card-body uk-card-hover">
-            <h3 class="uk-card-title"><?= $username; ?></h3>
+            <h3 class="uk-card-title"><?=$username;?></h3>
             <ul>
-              <li>Nama Lengkap : <?= $username; ?></li>
-              <li>No Meter : <?= $nomor_kwh; ?></li>
-              <li>Alamat : <?= $alamat; ?> </li>
+              <li>Nama Lengkap : <?=$username;?></li>
+              <li>No Meter : <?=$nomor_kwh;?></li>
+              <li>Alamat : <?=$alamat;?> </li>
 
               <form action="action/penggunaan-action.php" method="post">
               <li>
+                <?php
+					$bulan_sekarang = date('m');
+				?>
                 Bulan :
                 <select name="bulan">
-                    <option value="01">Januari</option>
-                    <option value="02">Februari</option>
-                    <option value="03">Maret</option>
-                    <option value="04">April</option>
-                    <option value="05">Mei</option>
-                    <option value="06">Juni</option>
-                    <option value="07">Juli</option>
-                    <option value="08">Agustus</option>
-                    <option value="09">September</option>
-                    <option value="10">Oktober</option>
-                    <option value="11">November</option>
-                    <option value="12">Desember</option>
+                    <option value="01" <?=$bulan_sekarang == '01' ? 'selected="selected"' : ''?>>Januari</option>
+                    <option value="02" <?=$bulan_sekarang == '02' ? 'selected="selected"' : ''?>>Februari</option>
+                    <option value="03" <?=$bulan_sekarang == '03' ? 'selected="selected"' : ''?>>Maret</option>
+                    <option value="04" <?=$bulan_sekarang == '04' ? 'selected="selected"' : ''?>>April</option>
+                    <option value="05" <?=$bulan_sekarang == '05' ? 'selected="selected"' : ''?>>Mei</option>
+                    <option value="06" <?=$bulan_sekarang == '06' ? 'selected="selected"' : ''?>>Juni</option>
+                    <option value="07" <?=$bulan_sekarang == '07' ? 'selected="selected"' : ''?>>Juli</option>
+                    <option value="08" <?=$bulan_sekarang == '08' ? 'selected="selected"' : ''?>>Agustus</option>
+                    <option value="09" <?=$bulan_sekarang == '09' ? 'selected="selected"' : ''?>>September</option>
+                    <option value="10" <?=$bulan_sekarang == '10' ? 'selected="selected"' : ''?>>Oktober</option>
+                    <option value="11" <?=$bulan_sekarang == '11' ? 'selected="selected"' : ''?>>November</option>
+                    <option value="12" <?=$bulan_sekarang == '12' ? 'selected="selected"' : ''?>>Desember</option>
                 </select>
               </li>
               <li>
                 Tahun :
                 <?php
-                  $tahun_lalu = date('Y') -1;
-                  $tahun_sekarang = date('Y');
-                ?>
+					$tahun_lalu     = date('Y') - 1;
+					$tahun_sekarang = date('Y');
+				?>
                 <select  name="tahun">
-                  <option value="<?= $tahun_lalu ?>"><?= $tahun_lalu ?></option>
-                  <option value="<?= $tahun_sekarang ?>"><?= $tahun_sekarang ?></option>
+                  <option value="<?=$tahun_lalu?>"><?=$tahun_lalu?></option>
+                  <option value="<?=$tahun_sekarang?>" selected="selected"><?=$tahun_sekarang?></option>
                 </select>
               </li>
               <li>
@@ -144,8 +148,5 @@
         </div>
       </div> -->
       <!-- Data Modal Barang Pembeli End Session -->
-
-
-
   </body>
 </html>
