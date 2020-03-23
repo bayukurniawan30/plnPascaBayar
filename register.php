@@ -1,8 +1,9 @@
 <?php
 require 'include/connection.php';
 require 'include/class/userclass.php';
+require 'include/class/AdminClass.php';
 
-  $classUsers = new UsersClass($pdo);
+  $classUsers = new AdminClass($pdo);
   $tarif = $classUsers->tarif();
 
   $page = isset($_GET['page']) ? $_GET['page'] : NULL;

@@ -41,6 +41,7 @@ class UsersClass
     public function tarif() //munculin data daya dari database
 
     {
+<<<<<<< Updated upstream
         $tarif = $this->pdo->query("SELECT * FROM tarif");
         if ($tarif->rowCount() > 0) {
             while ($rows = $tarif->fetch(PDO::FETCH_OBJ)) {
@@ -50,6 +51,17 @@ class UsersClass
             return $data;
         }
         return false;
+=======
+<<<<<<< Updated upstream
+      $tarif = $this->pdo->query("SELECT * FROM tarif");
+      if ($tarif->rowCount()>0)
+      {
+          while ($rows = $tarif->fetch(PDO::FETCH_OBJ))
+            $data[] = $rows;
+          return $data;
+      }
+      return false;
+>>>>>>> Stashed changes
     }
 
     public function register_admin($username, $nama_admin, $password)
@@ -82,6 +94,18 @@ class UsersClass
             }
         }
     }
+=======
+        $tarif = $this->pdo->query("SELECT * FROM tarif");
+        if ($tarif->rowCount() > 0) {
+            while ($rows = $tarif->fetch(PDO::FETCH_OBJ)) {
+                $data[] = $rows;
+            }
+            return $data;
+        }
+        return false;
+    }
+
+>>>>>>> Stashed changes
 
     public function register_bank($username, $email, $password)
     {
@@ -139,6 +163,7 @@ class UsersClass
         return false;
     }
 
+<<<<<<< Updated upstream
     public function login_admin($username, $password)
     {
         $query = $this->pdo->query("SELECT * FROM admin WHERE username = '$username'");
@@ -153,6 +178,8 @@ class UsersClass
         }
     }
 
+=======
+>>>>>>> Stashed changes
     public function login_bank($username, $password)
     {
         $query = $this->pdo->query("SELECT * FROM bank WHERE username = '$username'");
@@ -182,11 +209,27 @@ class UsersClass
         $masukanpenggunaan->bindParam(':meter_akhir', $meter_akhir);
 
         if ($masukanpenggunaan->execute()) {
+<<<<<<< Updated upstream
             $status        = 0;
             $id_penggunaan = $this->pdo->lastinsertId();
 			$jumlah_meter  = $meter_akhir - $meter_awal;
 			
             $masukantagihan = $this->pdo->prepare("INSERT INTO
+=======
+<<<<<<< Updated upstream
+
+          $status = 0;
+          $id_penggunaan = $this->pdo->lastinsertId();
+          $jumlah_meter = $meter_akhir - $meter_awal ;
+          $masukantagihan = $this->pdo->prepare("INSERT INTO
+=======
+            $status        = 0;
+            $id_penggunaan = $this->pdo->lastinsertId();
+			      $jumlah_meter  = $meter_akhir - $meter_awal;
+
+            $masukantagihan = $this->pdo->prepare("INSERT INTO
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
             tagihan(id_penggunaan, id_pelanggan, bulan, tahun, jumlah_meter, status)
             VALUES(:id_penggunaan, :id_pelanggan, :bulan, :tahun, :jumlah_meter, :status)");
 
@@ -201,6 +244,38 @@ class UsersClass
 
                 $id_tagihan = $this->pdo->lastinsertId();
 
+<<<<<<< Updated upstream
+=======
+<<<<<<< Updated upstream
+                 $sessionId = $_SESSION['id'];
+                 $tarif = $this->pdo->query("SELECT a.*, b.* FROM pelanggan a INNER JOIN tarif b ON a.id_pelanggan = b.id_tarif WHERE a.id = '$sessionId' LIMIT 1");
+                 if ($tarif->rowCount(  ) > 0 ) {
+                   $fetch = $tarif->fetch(PDO::FETCH_OBJ);
+                   $tarifperkwh = $fetch->tarifperkwh;
+                   $total_bayar = $jumlah_meter * $tarifperkwh;
+                   $biaya_admin = 2500;
+                 }
+
+                 	 $masukanpembayaran = $this->pdo->prepare("INSERT INTO
+                   pembayaran(id_tagihan, id_pelanggan, biaya_admin, total_bayar)
+                   VALUES(:id_tagihan, :id_pelanggan, :biaya_admin, :total_bayar)");
+
+                   $masukanpembayaran->bindParam(':id_tagihan', $id_tagihan);
+                   $masukanpembayaran->bindParam(':id_pelanggan', $id_pelanggan);
+                   $masukanpembayaran->bindParam(':biaya_admin', $biaya_admin);
+                   $masukanpembayaran->bindParam(':total_bayar', $total_bayar);
+                   //tanggal, bulan, id_admin NULL dulu
+
+                  if ($masukanpembayaran->execute([$id_tagihan, $id_pelanggan, $biaya_admin, $total_bayar])) {
+                    return '1';
+                  }
+              }
+        }
+        else {
+          return '0';
+        }
+=======
+>>>>>>> Stashed changes
                 $sessionId = $_SESSION['id'];
                 $tarif = $this->pdo->query("SELECT a.*, b.* FROM pelanggan a INNER JOIN tarif b ON a.id_tarif = b.id WHERE a.id = '$sessionId' LIMIT 1");
                 if ($tarif->rowCount() > 0) {
@@ -224,8 +299,14 @@ class UsersClass
                     }
                 }
             }
+<<<<<<< Updated upstream
 		} 
 		
 		return false;
+=======
+		}
+		return false;
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
     }
 }

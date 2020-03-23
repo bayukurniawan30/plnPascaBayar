@@ -1,10 +1,20 @@
 <?php
   require 'include/connection.php';
-  require 'include/class/userclass.php';
+  require 'include/class/AdminClass.php';
+
     if (empty($_SESSION['login'])) {
       header("Location:login-admin.php");
       exit;
     }
+    $classAdmin = new AdminClass($pdo);
+    $id_pelanggan = isset($_GET['id_pelanggan']) ? $_GET['id_pelanggan'] : NULL;
+
+    $userid = $_SESSION['id'];
+    $cekuser = $classAdmin->usernomerMeter($userid);
+    // var_dump($userid);
+    // die;
+    $pembayaranId = $classAdmin->pembayaran($id_pelanggan);
+
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -40,24 +50,82 @@
                 <button class="uk-offcanvas-close" type="button" uk-close></button>
                 <h3>Menu</h3>
                 <a style="text-decoration: none;" href="register-bank.php"><p><span uk-icon="icon: user"></span> Tambah User Bank</p></a>
-                <a style="text-decoration: none;" href="#"><p><span uk-icon="icon: history"></span>  Riwayat Pembayaran</p></a>
+                <a style="text-decoration: none;" href="admin-nomer-meter.php"><p><span uk-icon="icon: history"></span>  Masukan Nomer Meter</p></a>
                 <a style="text-decoration: none;" href="action/logout-action.php"><p><span uk-icon="icon: sign-out"></span> Sign Out</p></a>
             </div>
         </div>
 
         <div class="uk-child-width-1-2@s" uk-grid>
-
           <div>
             <div class="uk-card uk-card-default uk-card-xlarge uk-card-body ">
               <h3 class="uk-card-title">PEMBAYARAN</h3>
               <div class="uk-card uk-card-default uk-card-xlarge uk-card-body uk-card-hover">
-                <h3 class="uk-card-title">Dananjaya</h3>
+                <h3 class="uk-card-title"><?= $cekuser->username; ?></h3>
                 <ul>
-                  <li>Nama Lengkap : I Gusti Dananjaya</li>
-                  <li>No Meter : 510078987</li>
-                  <li>Alamat : Jalan Jauh Banget </li>
-                  <li>No Telp : 08009098089 </li>
-                  <li>Total Tagihan dan Pajak Bank : Rp. 200.000</li>
+                  <li>Nama Lengkap : <?= $cekuser->username; ?></li>
+                  <li>No Meter : <?= $cekuser->nomor_kwh;?></li>
+                  <li>Alamat : <?= $cekuser->alamat; ?> </li>
+                  <form action="action/admin-update-data.php" method="post">
+                    <li>
+                      <?php
+                          $date = date('d');
+                       ?>
+                       Tanggal :
+                       <select  name="tanggal_pembayaran">
+                         <option value="01" <?=$date == '01' ? 'selected="selected"' : ''?>>01</option>
+                         <option value="01" <?=$date == '02' ? 'selected="selected"' : ''?>>02</option>
+                         <option value="01" <?=$date == '03' ? 'selected="selected"' : ''?>>03</option>
+                         <option value="01" <?=$date == '04' ? 'selected="selected"' : ''?>>04</option>
+                         <option value="01" <?=$date == '05' ? 'selected="selected"' : ''?>>05</option>
+                         <option value="01" <?=$date == '06' ? 'selected="selected"' : ''?>>06</option>
+                         <option value="01" <?=$date == '07' ? 'selected="selected"' : ''?>>07</option>
+                         <option value="01" <?=$date == '08' ? 'selected="selected"' : ''?>>08</option>
+                         <option value="01" <?=$date == '09' ? 'selected="selected"' : ''?>>09</option>
+                         <option value="01" <?=$date == '10' ? 'selected="selected"' : ''?>>10</option>
+                         <option value="01" <?=$date == '11' ? 'selected="selected"' : ''?>>11</option>
+                         <option value="01" <?=$date == '12' ? 'selected="selected"' : ''?>>12</option>
+                         <option value="01" <?=$date == '13' ? 'selected="selected"' : ''?>>13</option>
+                         <option value="01" <?=$date == '14' ? 'selected="selected"' : ''?>>14</option>
+                         <option value="01" <?=$date == '15' ? 'selected="selected"' : ''?>>15</option>
+                         <option value="01" <?=$date == '16' ? 'selected="selected"' : ''?>>16</option>
+                         <option value="01" <?=$date == '17' ? 'selected="selected"' : ''?>>17</option>
+                         <option value="01" <?=$date == '18' ? 'selected="selected"' : ''?>>18</option>
+                         <option value="01" <?=$date == '19' ? 'selected="selected"' : ''?>>19</option>
+                         <option value="01" <?=$date == '20' ? 'selected="selected"' : ''?>>20</option>
+                         <option value="01" <?=$date == '21' ? 'selected="selected"' : ''?>>21</option>
+                         <option value="01" <?=$date == '22' ? 'selected="selected"' : ''?>>22</option>
+                         <option value="01" <?=$date == '23' ? 'selected="selected"' : ''?>>23</option>
+                         <option value="01" <?=$date == '24' ? 'selected="selected"' : ''?>>24</option>
+                         <option value="01" <?=$date == '25' ? 'selected="selected"' : ''?>>25</option>
+                         <option value="01" <?=$date == '26' ? 'selected="selected"' : ''?>>26</option>
+                         <option value="01" <?=$date == '27' ? 'selected="selected"' : ''?>>27</option>
+                         <option value="01" <?=$date == '28' ? 'selected="selected"' : ''?>>28</option>
+                         <option value="01" <?=$date == '29' ? 'selected="selected"' : ''?>>29</option>
+                         <option value="01" <?=$date == '30' ? 'selected="selected"' : ''?>>30</option>
+                         <option value="01" <?=$date == '31' ? 'selected="selected"' : ''?>>31</option>
+                       </select>
+                    <li>
+                    <?php
+    									$bulan_sekarang = date('m');
+    								?>
+                    Bulan :
+                    <select name="bulan_bayar">
+                        <option value="01" <?=$bulan_sekarang == '01' ? 'selected="selected"' : ''?>>Januari</option>
+                        <option value="02" <?=$bulan_sekarang == '02' ? 'selected="selected"' : ''?>>Februari</option>
+                        <option value="03" <?=$bulan_sekarang == '03' ? 'selected="selected"' : ''?>>Maret</option>
+                        <option value="04" <?=$bulan_sekarang == '04' ? 'selected="selected"' : ''?>>April</option>
+                        <option value="05" <?=$bulan_sekarang == '05' ? 'selected="selected"' : ''?>>Mei</option>
+                        <option value="06" <?=$bulan_sekarang == '06' ? 'selected="selected"' : ''?>>Juni</option>
+                        <option value="07" <?=$bulan_sekarang == '07' ? 'selected="selected"' : ''?>>Juli</option>
+                        <option value="08" <?=$bulan_sekarang == '08' ? 'selected="selected"' : ''?>>Agustus</option>
+                        <option value="09" <?=$bulan_sekarang == '09' ? 'selected="selected"' : ''?>>September</option>
+                        <option value="10" <?=$bulan_sekarang == '10' ? 'selected="selected"' : ''?>>Oktober</option>
+                        <option value="11" <?=$bulan_sekarang == '11' ? 'selected="selected"' : ''?>>November</option>
+                        <option value="12" <?=$bulan_sekarang == '12' ? 'selected="selected"' : ''?>>Desember</option>
+                    </select>
+                    <li><input type="hidden" name="id_pembayaran" value="<?=$pembayaranId->id; ?>"></li>
+                    <button type="submit" name="button">SUBMIT</button>
+                  </form>
                 </ul>
                 <h3>Status : LUNAS !</h3>
               </div>

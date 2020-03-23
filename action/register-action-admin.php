@@ -1,8 +1,8 @@
 <?php
   require '../include/connection.php';
-  require '../include/class/userclass.php';
+  require '../include/class/AdminClass.php';
 
-  $classUsers = new UsersClass($pdo);
+  $classUsers = new AdminClass($pdo);
 
   $username = $_POST['username'];
   $nama_admin = $_POST['nama_admin'];

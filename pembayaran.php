@@ -62,9 +62,18 @@
 
               <form action="action/penggunaan-action.php" method="post">
               <li>
+<<<<<<< Updated upstream
                 <?php
 					$bulan_sekarang = date('m');
 				?>
+=======
+<<<<<<< Updated upstream
+=======
+                <?php
+									$bulan_sekarang = date('m');
+								?>
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
                 Bulan :
                 <select name="bulan">
                     <option value="01" <?=$bulan_sekarang == '01' ? 'selected="selected"' : ''?>>Januari</option>
