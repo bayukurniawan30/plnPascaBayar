@@ -11,10 +11,7 @@
 
 	$penggunaan = $classUsers->penggunaan($bulan, $tahun, $meter_awal, $meter_akhir);
 
-<<<<<<< Updated upstream
-=======
-<<<<<<< Updated upstream
-  if ($penggunaan == '1') {
+  if ($penggunaan != false) {
     echo "<script>
           alert('Data Berhasil Masuk');
           </script>";
@@ -27,25 +24,3 @@
   }
 
  ?>
-=======
->>>>>>> Stashed changes
-	if ($penggunaan) {
-		echo "<script>
-			alert('Data Berhasil Masuk');
-			</script>";
-<<<<<<< Updated upstream
-		header("Location: ../dashboard.php");
-=======
-		header("Location: ../tagihan.php");
->>>>>>> Stashed changes
-	} else {
-		echo "<script>
-			alert('Data Gagal Masuk');
-			</script>";
-	}
-<<<<<<< Updated upstream
-?>
-=======
-?>
->>>>>>> Stashed changes
->>>>>>> Stashed changes

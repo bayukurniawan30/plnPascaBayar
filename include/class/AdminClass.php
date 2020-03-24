@@ -18,11 +18,9 @@
         return false;
       }
 
-      public function usernomerMeter($sessionId)
+      public function usernomerMeter($nomerMeter)
       {
-        $sessionId = $_SESSION['id'];
-        $query = $this->pdo->query("SELECT * FROM pelanggan a INNER JOIN pembayaran b ON a.id = b.id WHERE a.id = $sessionId");
-        $query->execute();
+        $query = $this->pdo->query("SELECT * FROM pelanggan WHERE nomor_kwh = '$nomerMeter'");
         if ($query->rowCount() > 0) {
             $rows = $query->fetch(PDO::FETCH_OBJ);
             return $rows;
@@ -85,15 +83,36 @@
           return false;
       }
 
+    public function tagihanTerakhir($id_pelanggan) {
+      $query = $this->pdo->query("SELECT * FROM pembayaran WHERE id_pelanggan = '$id_pelanggan' ORDER BY id LIMIT 1");
+      if ($query->rowCount() > 0) {
+        $fetch = $query->fetch(PDO::FETCH_OBJ);
+        return $fetch;
+      }
 
+      return false;
+    }
     public function pembayaran($id_pelanggan)
     {
-        $pembayaranId = $this->pdo->query("SELECT * FROM pembayaran WHERE id_pelanggan = '$id_pelanggan' LIMIT 1");
-        $pembayaranId = $pembayaranId->fetch(PDO::FETCH_OBJ);
-        return $pembayaranId;
+        $pembayaran = $this->pdo->query("SELECT a.*, b.*, c.* FROM pembayaran a INNER JOIN tagihan b ON a.id_tagihan = b.id INNER JOIN pelanggan c ON a.id_pelanggan = c.id WHERE a.id_pelanggan = '$id_pelanggan' ORDER BY a.id DESC LIMIT 1");
+        $pembayaranFetch = $pembayaran->fetch(PDO::FETCH_OBJ);
+        return $pembayaranFetch;
+    }
+    public function riwayatPembayaran($id_pelanggan)
+    {
+        $pembayaran = $this->pdo->query("SELECT a.*, b.*, c.* FROM pembayaran a INNER JOIN tagihan b ON a.id_tagihan = b.id INNER JOIN pelanggan c ON a.id_pelanggan = c.id WHERE a.id_pelanggan = '$id_pelanggan' ORDER BY a.id DESC");
+        if ($pembayaran->rowCount() > 0) {
+          while ($rows = $pembayaran->fetch(PDO::FETCH_OBJ)) {
+              $data[] = $rows;
+          }
+
+          return $data;
+        }
+
+        return false;
     }
 
-    public function adminUpdate($tanggal_pembayaran, $bulan_bayar)
+    public function adminUpdate($tanggal_pembayaran, $bulan_bayar, $id_pembayaran)
     {
       $id_admin = $_SESSION['id'];
       $sql = "UPDATE pembayaran SET tanggal_pembayaran=:tanggal_pembayaran, bulan_bayar=:bulan_bayar WHERE id=:id";
@@ -101,7 +120,7 @@
 
       $stmt->bindParam(':tanggal_pembayaran', $tanggal_pembayaran);
       $stmt->bindParam(':bulan_bayar', $bulan_bayar);
-      $stmt->bindParam(':id', $id);
+      $stmt->bindParam(':id', $id_pembayaran);
 
       if ($stmt->execute()) {
         return true;

@@ -1,15 +1,15 @@
 <?php
-	require 'include/connection.php';
-	require 'include/class/userclass.php';
+require 'include/connection.php';
+require 'include/class/userclass.php';
 
-	$userid     = $_SESSION['id'];
+$userid = $_SESSION['id'];
 
-	$classUsers = new UsersClass($pdo);
+$classUsers = new UsersClass($pdo);
 
-	$loginId    = $classUsers->loginUser($userid);
-	$username   = $loginId->username;
-	$alamat     = $loginId->alamat;
-	$nomor_kwh  = $loginId->nomor_kwh;
+$loginId = $classUsers->loginUser($userid);
+$username = $loginId->username;
+$alamat = $loginId->alamat;
+$nomor_kwh = $loginId->nomor_kwh;
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -62,18 +62,9 @@
 
               <form action="action/penggunaan-action.php" method="post">
               <li>
-<<<<<<< Updated upstream
                 <?php
-					$bulan_sekarang = date('m');
-				?>
-=======
-<<<<<<< Updated upstream
-=======
-                <?php
-									$bulan_sekarang = date('m');
-								?>
->>>>>>> Stashed changes
->>>>>>> Stashed changes
+                  $bulan_sekarang = date('m');
+                ?>
                 Bulan :
                 <select name="bulan">
                     <option value="01" <?=$bulan_sekarang == '01' ? 'selected="selected"' : ''?>>Januari</option>
@@ -93,9 +84,9 @@
               <li>
                 Tahun :
                 <?php
-					$tahun_lalu     = date('Y') - 1;
-					$tahun_sekarang = date('Y');
-				?>
+                  $tahun_lalu = date('Y') - 1;
+                  $tahun_sekarang = date('Y');
+                ?>
                 <select  name="tahun">
                   <option value="<?=$tahun_lalu?>"><?=$tahun_lalu?></option>
                   <option value="<?=$tahun_sekarang?>" selected="selected"><?=$tahun_sekarang?></option>

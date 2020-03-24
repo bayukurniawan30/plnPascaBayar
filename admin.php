@@ -8,12 +8,47 @@
     }
     $classAdmin = new AdminClass($pdo);
     $id_pelanggan = isset($_GET['id_pelanggan']) ? $_GET['id_pelanggan'] : NULL;
+    $nomerMeter   = isset($_GET['no_meter']) ? $_GET['no_meter'] : NULL;
 
     $userid = $_SESSION['id'];
-    $cekuser = $classAdmin->usernomerMeter($userid);
+    $cekuser = $classAdmin->usernomerMeter($nomerMeter);
     // var_dump($userid);
     // die;
-    $pembayaranId = $classAdmin->pembayaran($id_pelanggan);
+    $tagihan = $classAdmin->pembayaran($cekuser->id);
+    $tagihanTerakhir = $classAdmin->tagihanTerakhir($cekuser->id);
+    if ($tagihanTerakhir) {
+      if ($tagihanTerakhir->tanggal_pembayaran == NULL && $tagihanTerakhir->bulan_bayar == NULL) {
+        $status = 'BELUM LUNAS';
+      }
+      else {
+        $status = 'LUNAS';
+      }
+    }
+
+    $riwayat = $classAdmin->riwayatPembayaran($cekuser->id);
+
+    function rupiah($angka) {
+      $hasil_rupiah = "Rp " . number_format($angka,2,',','.');
+      return $hasil_rupiah;
+    }
+
+    function bulanIndo($tanggal) {
+      $bulan = array (1 =>   'Januari',
+            'Februari',
+            'Maret',
+            'April',
+            'Mei',
+            'Juni',
+            'Juli',
+            'Agustus',
+            'September',
+            'Oktober',
+            'November',
+            'Desember'
+          );
+      $split = explode('-', $tanggal);
+      return $bulan[ (int)$split[0] ] . ' ' . $split[1];
+    }
 
 ?>
 <!DOCTYPE html>
@@ -60,9 +95,9 @@
             <div class="uk-card uk-card-default uk-card-xlarge uk-card-body ">
               <h3 class="uk-card-title">PEMBAYARAN</h3>
               <div class="uk-card uk-card-default uk-card-xlarge uk-card-body uk-card-hover">
-                <h3 class="uk-card-title"><?= $cekuser->username; ?></h3>
+                <h3 class="uk-card-title"><?= $cekuser->nama_pelanggan; ?></h3>
                 <ul>
-                  <li>Nama Lengkap : <?= $cekuser->username; ?></li>
+                  <li>Nama Lengkap : <?= $cekuser->nama_pelanggan; ?></li>
                   <li>No Meter : <?= $cekuser->nomor_kwh;?></li>
                   <li>Alamat : <?= $cekuser->alamat; ?> </li>
                   <form action="action/admin-update-data.php" method="post">
@@ -123,11 +158,11 @@
                         <option value="11" <?=$bulan_sekarang == '11' ? 'selected="selected"' : ''?>>November</option>
                         <option value="12" <?=$bulan_sekarang == '12' ? 'selected="selected"' : ''?>>Desember</option>
                     </select>
-                    <li><input type="hidden" name="id_pembayaran" value="<?=$pembayaranId->id; ?>"></li>
+                    <input type="hidden" name="id_pembayaran" value="<?=$tagihanTerakhir->id; ?>"><br>
+                    <input type="hidden" name="nomer_meter" value="<?=$nomerMeter; ?>"><br>
                     <button type="submit" name="button">SUBMIT</button>
                   </form>
                 </ul>
-                <h3>Status : LUNAS !</h3>
               </div>
             </div>
           </div>
@@ -136,16 +171,17 @@
             <div style="margin-top: 15px;"class="uk-card uk-card-default uk-card-xlarge uk-card-body ">
               <h3 class="uk-card-title">TAGIHAN</h3>
               <div class="uk-card uk-card-default uk-card-xlarge uk-card-body uk-card-hover">
-                <h3 class="uk-card-title">Dananjaya</h3>
+                <h3 class="uk-card-title"><?= $tagihan->nama_pelanggan ?></h3>
                 <ul>
-                  <li>Nama Lengkap : I Gusti Dananjaya</li>
-                  <li>No Meter : 510078987</li>
-                  <li>Alamat : Jalan Jauh Banget </li>
-                  <li>No Telp : 08009098089 </li>
-                  <li>Tanggal Tunggak : 02-03-2020 s/d 02-04-2020</li>
-                  <li>Tagihan Listrik : Rp. 195.000</li>
-                  <li>Pajak Bank : Rp. 5.000</li>
+                  <li>Nama Lengkap : <?= $tagihan->nama_pelanggan ?></li>
+                  <li>No Meter : <?= $tagihan->nomor_kwh ?></li>
+                  <li>Alamat : <?= $tagihan->alamat ?> </li>
+                  <li>Bulan Tunggak : <?= bulanIndo(date('m-Y', strtotime('01-' . $tagihan->bulan . '-' . $tagihan->tahun))) ?></li>
+                  <li>Tagihan Listrik : <?= rupiah($tagihan->total_bayar) ?></li>
+                  <li>Pajak Bank : <?= rupiah($tagihan->biaya_admin) ?></li>
+                  <li><strong>TOTAL : <?= rupiah($tagihan->biaya_admin + $tagihan->total_bayar) ?></strong></li>
                 </ul>
+                <h3>Status : <?= $status ?></h3>
               </div>
             </div>
           </div>
@@ -156,18 +192,44 @@
             <div class="uk-card uk-card-default uk-card-xlarge uk-card-body">
               <h3 class="uk-card-title">RIWAYAT PEMBAYARAN</h3>
               <div class="uk-card uk-card-default uk-card-small uk-card-body uk-card-hover">
-                <h3 class="uk-card-title">Dananjaya</h3>
-                <ul>
-                  <li>Nama Lengkap : I Gusti Dananjaya</li>
-                  <li>No Meter : 510078987</li>
-                  <li>Alamat : Jalan Jauh Banget </li>
-                  <li>No Telp : 08009098089 </li>
-                  <li>Tanggal Tunggak : 02-03-2020 s/d 02-04-2020</li>
-                  <li>Tagihan Listrik : Rp. 195.000</li>
-                  <li>Pajak Bank : Rp. 5.000</li>
-                  <li>Total Tagihan dan Pajak Bank : Rp. 200.000</li>
-                </ul>
-                <h3>Status : LUNAS !</h3>
+              <?php
+                if ($riwayat):
+              ?>
+                <table class="uk-table">
+                  <thead>
+                    <tr>
+                      <th>Nama Pelanggan</th>
+                      <th>Bulan</th>
+                      <th>Total Bayar</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  <?php
+                    foreach ($riwayat as $data):
+                      if ($data->tanggal_pembayaran == NULL && $data->bulan_bayar == NULL) {
+                        $statusRiwayat = 'Belum Lunas';
+                      }
+                      else {
+                        $statusRiwayat = 'Lunas';
+                      }
+                  ?>
+                    <tr>
+                      <td><?= $data->nama_pelanggan ?></td>
+                      <td><?= bulanIndo(date('m-Y', strtotime('01-' . $data->bulan . '-' . $data->tahun))) ?></td>
+                      <td><?= rupiah($data->biaya_admin + $data->total_bayar) ?></td>
+                      <td><?= $statusRiwayat ?></td>
+                    </tr>
+                  <?php
+                    endforeach;
+                  ?>
+                  </tbody>
+                </table>    
+              <?php
+                else:
+                  echo 'Belum ada riwayat pembayaran';
+                endif;
+              ?>
               </div>
             </div>
           </div>
